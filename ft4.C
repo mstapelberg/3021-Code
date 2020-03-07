@@ -32,7 +32,7 @@ double en_fun(int p, int B){
     //return TMath::Exp(-DeltaE/(k_b * R));
     return p_B;
 }
-int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
+int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m, int p){
        double left_cut = 0.25;
        double right_cut = 0.5;
        double up_cut = 0.75;
@@ -41,8 +41,8 @@ int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
        temp[0] = cell_pos_x; //initializes the x pos
        temp[1] = cell_pos_y; //initializes the y pos
             if (0 <= rand && rand <= left_cut){
-                if (cell_pos_x != 0){             //determines if at the left edge of the board
-                    temp[0] = cell_pos_x - 1;        //moves cell to left
+                if (cell_pos_x -1 != 0){             //determines if at the left edge of the board
+                    temp[0] = cell_pos_x - p;        //moves cell to left
                     std::cout << "The cell x pos is now " << temp[0] << std::endl;
                 }
                 else{
@@ -51,8 +51,8 @@ int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
             }                                     //end of left movement statement
             //Right Move
             else if (left_cut < rand && rand <=right_cut){
-                if (cell_pos_x != n){               //determines if cell is at right bound
-                    temp[0] = cell_pos_x + 1;
+                if (cell_pos_x + 1 != n){               //determines if cell is at right bound
+                    temp[0] = cell_pos_x + p;
                     std::cout << "The cell x pos is now " << temp[0] << std::endl;
                 }
                 else{
@@ -64,8 +64,8 @@ int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
 
             //Up Move
             else if (right_cut < rand && rand <= up_cut){
-                if (cell_pos_y != 0){               //checks if the cell is at the top of the matrix
-                    temp[1] = cell_pos_y -1;         //moves cell up
+                if (cell_pos_y - 1 != 0){               //checks if the cell is at the top of the matrix
+                    temp[1] = cell_pos_y -p;         //moves cell up
                     std::cout << "The cell y pos is now " << temp[1] << std::endl;
                 }
                else{
@@ -74,8 +74,8 @@ int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
             }
             //Down Move
             else{
-                if (cell_pos_y != m){               //checks if the cell is at the bottom of the matrix
-                    temp[1] = cell_pos_y + 1;          //moves cell down
+                if (cell_pos_y + 1 != m){               //checks if the cell is at the bottom of the matrix
+                    temp[1] = cell_pos_y + p;          //moves cell down
                     std::cout << "The cell y pos is now " << temp[1] << std::endl;
                 }
                 else{
@@ -85,13 +85,13 @@ int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
             return temp;
    }
 void ft4(){
-    const int m = 20; //number of rows add 1 to desired value
-    const int n = 20; //number of columns add 1 to desired value
+    const int m = 51; //number of rows add 1 to desired value
+    const int n = 51; //number of columns add 1 to desired value
     const int p = 2; //pillar spacing
-    int cell_pos_x = 10;
-    int cell_pos_y = 10;
+    int cell_pos_x = 5;
+    int cell_pos_y = 40;
     double p_B, move_prob;
-    int n_trials = 50;
+    int n_trials = 1000;
     double left_cut = 0.25;
     double right_cut = 0.5;
     double up_cut = 0.75;
@@ -140,7 +140,7 @@ void ft4(){
     //for (int i = 0; i < n_trials; i++){
     while (i < n_trials){
             double move_dir = gr->Rndm();
-            cell_coor = mover(move_dir, cell_pos_x, cell_pos_y, n, m);                                    // Classifier if statements
+            cell_coor = mover(move_dir, cell_pos_x, cell_pos_y, n, m, p);                                    // Classifier if statements
             if (matrix[cell_coor[0]][cell_coor[1]] == 1){    // if there is a pillar in the move direction
                 p_B = en_fun(p, matrix[cell_coor[0]][cell_coor[1]]);
                 move_prob = gr->Rndm();
@@ -153,7 +153,8 @@ void ft4(){
                     matrix[cell_coor[0]][cell_coor[1]] = 1; //leaves pillar in place
                 }
             }//end of if ==1 statement
-            
+
+            /*
             else if(matrix[cell_coor[0]][cell_coor[1]] == 2 && move_dir < left_cut && cell_coor[0]-1 >= 0){ //if we encounter another cell on the left
                matrix[cell_coor[0]][cell_coor[1]] =2;
                matrix[cell_coor[0]-1][cell_coor[1]] =2;
@@ -176,7 +177,7 @@ void ft4(){
                matrix[cell_coor[0]][cell_coor[1]] =2;
                matrix[cell_coor[0]][cell_coor[1]+1] =2;
             }
-            
+           */ 
             else { //no pillar 
                 cell_pos_x = cell_coor[0];
                 cell_pos_y = cell_coor[1];
