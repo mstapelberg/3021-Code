@@ -3,18 +3,33 @@
 #include<algorithm>
 #include"TRandomGen.h"
 #include"TH2I.h"
+#include"TMath.h"
+
+    //TODO - Include probability to go from pillar to substrate  - pillar is substrate is easy when p is high 
+    //TODO - Include probability to go from substrate to pillar - high when p is 
+    //TODO - Include pillar to pillar probability  - this is high when p is low, at roughly 4, the probabulity for pillar to subrate is higher (2 is the critical point?)
+    //TODO - Figure out variable move length based on whether the cell is on the substrate or the pillar 
+    //TODO - Fix the Segmentation Violation 
+
 
 double en_fun(int p, int B){
     //ENERGY FUNCTIONS CALCULATIONS THE PROBABILITY OF GOING ONTO A PILLAR 
     //WILL IMPLEMENT THE INSTANCE WHERE IT LANDS ON ITSELF
     double p_B;
     double p_pill = 1.0/double(p);
+    double DeltaE;
+    double k = 1; //PLAY WITH THIS 
+    double T = 298; //KELVIN
+    double k_b = 8.617E-5; //eV/K
     if (B==1){
         p_B = p_pill;
     }
     else{
         p_B = 1.0;
     }
+    DeltaE = 0.5 * k * TMath::Power(p_B, 2);
+
+    //return TMath::Exp(-DeltaE/(k_b * R));
     return p_B;
 }
 int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
@@ -70,13 +85,13 @@ int * mover(double rand, int cell_pos_x, int cell_pos_y, int n, int m){
             return temp;
    }
 void ft4(){
-    const int m = 50; //number of rows add 1 to desired value
-    const int n = 50; //number of columns add 1 to desired value
+    const int m = 20; //number of rows add 1 to desired value
+    const int n = 20; //number of columns add 1 to desired value
     const int p = 2; //pillar spacing
-    int cell_pos_x = 25;
-    int cell_pos_y = 25;
+    int cell_pos_x = 10;
+    int cell_pos_y = 10;
     double p_B, move_prob;
-    int n_trials = 400;
+    int n_trials = 50;
     double left_cut = 0.25;
     double right_cut = 0.5;
     double up_cut = 0.75;
